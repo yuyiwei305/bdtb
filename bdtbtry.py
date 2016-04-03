@@ -37,16 +37,22 @@ class BDTB(object):
 	def getcontext(self,pagenum):
 		truetext = []
 		page = self.getPage(pagenum)
-		for pagetxt in page.find_all("div",class_=re.compile('post_content_.*?',re.S)):
-			parttern = re.compile(r'<.*>',re.S)
-			for t in pagetxt.stripped_strings:
-				truetext.append(t)
-					
-		for t in truetext:
-			print t
-			print "------------------------------------"
+		html = self.getPage(page).find_all("div",class_="d_post_content j_d_post_content " )
+		for i in html:
+			stext =  str(i)
+			re_text = re.compile('^<div.+?>(.*?)</div>')
+			text =  re.findall(re_text,stext)
+			truetext.append(text[0])
+		return truetext
+			
+
+
+
 baseUrl = 'http://tieba.baidu.com/p/3138733512'
 bdtb = BDTB(baseUrl,1)
 #a = bdtb.gettitle()
 #b = bdtb.getpagenum()
-bdtb.getcontext(1)
+a = bdtb.getcontext(1)
+for i in a:
+	print i 
+	print "---------------------------------------------------------------------------------------"
